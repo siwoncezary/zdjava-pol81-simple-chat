@@ -11,6 +11,11 @@ public class SimpleChatClient {
         Scanner input = new Scanner(client.getInputStream());
         Scanner scanner = new Scanner(System.in);
         PrintWriter output = new PrintWriter(client.getOutputStream(), true);
+        new Thread(() -> {
+            while (input.hasNextLine()) {
+                System.out.println(input.nextLine());
+            }
+        }).start();
         while(true){
             String line = scanner.nextLine();
             if (line.equals("Q")){
@@ -18,9 +23,6 @@ public class SimpleChatClient {
                 return;
             }
             output.println(line);
-            if(input.hasNextLine()){
-                System.out.println(input.nextLine());
-            }
         }
     }
 }
