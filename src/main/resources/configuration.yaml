@@ -1,0 +1,6 @@
+port: 5555
+maxClients: 20
+users:
+  admin: admin
+  moderator: moderator
+channels: [random, general]

@@ -1,13 +1,12 @@
 package pl.sda.chat.server;
 
 import pl.sda.chat.client.ChatClient;
+import pl.sda.chat.configuration.Configuration;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -17,10 +16,17 @@ public class ChatServer {
     private final ExecutorService service;
     private final List<ChatClient> clients;
     private Logger logger = Logger.getLogger(ChatServer.class.getName());
-    public ChatServer(int port) throws IOException {
-        serverSocket = new ServerSocket(5555);
+    private final Map<String, String> users = new HashMap<>(){
+        {
+            put("EWA","1234");
+            put("KAROL", "ABCD");
+            put("LENA", "abcd");
+        }
+    };
+    public ChatServer(int port, int maxClients) throws IOException {
+        serverSocket = new ServerSocket(port);
         logger.info("Socket server at " + serverSocket.getInetAddress() +":" + serverSocket.getLocalPort());
-        service = Executors.newFixedThreadPool(20);
+        service = Executors.newFixedThreadPool(maxClients);
         clients = Collections.synchronizedList(new ArrayList<>());
     }
     public void start(){
@@ -36,17 +42,26 @@ public class ChatServer {
             }
         }
     }
-    //Dodać wzorzec command aby nasz obsługiwał polecenie:
-    //login: username, password
-    //send-to-all: message
-    //send-to: username, message
     public void process(String rawMessage, ChatClient origin){
-        //log o przetwarzanej wiadomości od klienta
-        clients.forEach(client ->{
-            if(client == origin){
-                return;
-            }
-            client.send(rawMessage);
-        });
+        //Dopisać obiekty interfejsu Command: SEND i SEND_MD, tak, aby niezalogowani użytkownicy nie dostawali wiadomości
+        Command command = CommandFactory.buildCommand(rawMessage, this, origin);
+        command.execute();
+//        clients.forEach(client ->{
+//            if(client == origin){
+//                return;
+//            }
+//            client.send(rawMessage);
+//        });
+    }
+
+    public boolean login(String username, String password){
+        if (users.get(username) != null){
+            return users.get(username).equals(password);
+        }
+        return false;
+    }
+
+    public void loginClient(ChatClient client){
+        client.setLogged(true);
     }
 }

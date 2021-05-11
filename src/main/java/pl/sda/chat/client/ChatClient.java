@@ -13,6 +13,8 @@ public class ChatClient implements Runnable {
     private PrintWriter output;
     private Scanner input;
     private final ChatServer server;
+    private boolean isLogged;
+
     Logger logger = Logger.getLogger(ChatClient.class.getName());
     public ChatClient(Socket clientSocket, ChatServer server) throws IOException {
         this.clientSocket = clientSocket;
@@ -36,5 +38,13 @@ public class ChatClient implements Runnable {
 
     public Socket getClientSocket() {
         return clientSocket;
+    }
+
+    public boolean isLogged() {
+        return isLogged;
+    }
+
+    public void setLogged(boolean logged) {
+        isLogged = logged;
     }
 }
