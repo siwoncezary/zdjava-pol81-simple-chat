@@ -32,7 +32,10 @@ public class ChatServer {
             }
         }
     }
-
+    //Dodać wzorzec command aby nasz obsługiwał polecenie:
+    //login: username, password
+    //send-to-all: message
+    //send-to: username, message
     public void process(String rawMessage, ChatClient origin){
         clients.forEach(client ->{
             if(client == origin){
