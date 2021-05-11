@@ -6,13 +6,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class ChatClient implements Runnable {
     private final Socket clientSocket;
     private PrintWriter output;
     private Scanner input;
     private final ChatServer server;
-
+    Logger logger = Logger.getLogger(ChatClient.class.getName());
     public ChatClient(Socket clientSocket, ChatServer server) throws IOException {
         this.clientSocket = clientSocket;
         output = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -30,6 +31,7 @@ public class ChatClient implements Runnable {
 
     public void send(String message){
         output.println("Server echo: " + message);
+        logger.info("Message: " + message + ", send to: " + clientSocket.getInetAddress() +":" + clientSocket.getPort());
     }
 
     public Socket getClientSocket() {
