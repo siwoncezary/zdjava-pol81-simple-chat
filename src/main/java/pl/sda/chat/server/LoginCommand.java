@@ -1,14 +1,12 @@
 package pl.sda.chat.server;
-
 import pl.sda.chat.client.ChatClient;
-//Format protokołu naszego chat servera
-//POLECENIE: parametry
 
 /**
- * LOGIN: username password
- * LOGIN: ewa 1234
- * Błędne polecenie
- * LOGIN: ewa
+ * LOGIN username password
+ * Przykład poprawnego polecenia
+ * LOGIN ewa 1234
+ * Przykład błędnego polecenia
+ * LOGIN ewa
  */
 public class LoginCommand implements Command{
     public static final String PREFIX_LOGIN = "LOGIN";
