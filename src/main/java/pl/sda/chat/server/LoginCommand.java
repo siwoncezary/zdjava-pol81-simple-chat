@@ -11,6 +11,9 @@ import pl.sda.chat.client.ChatClient;
  * LOGIN: ewa
  */
 public class LoginCommand implements Command{
+    public static final String PREFIX_LOGIN = "LOGIN";
+    private static final String LOGIN_ERROR_INVALID_PARAMETERS = "Invalid number of parameters!";
+    private static final String LOGIN_ERROR_INVALID_LOGIN_DATA = "Invalid username or password. Can,t login!";
     private ChatServer server;
     private ChatClient client;
     private String rawMessage;
@@ -22,16 +25,19 @@ public class LoginCommand implements Command{
     }
 
     @Override
-    public boolean execute() {
-        String[] tokens = rawMessage.substring(6).split(" ");
-        if (tokens.length != 2){
-            return false;
+    public void execute() {
+        String[] tokens = rawMessage.split(" ");
+        if (tokens.length != 3){
+            client.send(LOGIN_ERROR_INVALID_PARAMETERS);
+            server.disconnectClientAferDelay(client);
+            return;
         }
-        String username = tokens[0];
-        String password = tokens[1];
-        if (server.login(username, password)){
-            server.loginClient(client);
+        String username = tokens[1];
+        String password = tokens[2];
+        if (server.login(username, password, client)){
+            client.send("Welcome " + username + "!");
+        } else {
+            client.send(LOGIN_ERROR_INVALID_LOGIN_DATA);
         }
-        return true;
     }
 }

@@ -2,24 +2,26 @@ package pl.sda.chat.server;
 
 import pl.sda.chat.client.ChatClient;
 
+/**
+ * Przykładowa klasa z metodą fabryczną, która zwraca obiekty interfejsu Command.
+ */
 public class CommandFactory {
-    static final String LOGIN = "LOGIN:";
-    static final String SEND_TO_ALL = "SEND:";
-    static final String SEND_DM = "SEND_DM:";
+    /**
+     * Metoda statyczna budująca obiekty poleceń na podstawie prefiksu surowego łańcucha przesłanego do klienta
+     * @param rawMessage wiadomość od klienta
+     * @param server obiekt serwera
+     * @param client obiekt połączenia z klientem, który przysłał łańcuch rawMessage
+     * @return obiekt polecenia, który wykonuje odpowiednie operacje na obiektach serwera i klienta
+     */
     public static Command buildCommand(String rawMessage,
                                        ChatServer server,
                                        ChatClient client){
-        if (rawMessage.startsWith(LOGIN)){
+        if (rawMessage.startsWith(LoginCommand.PREFIX_LOGIN)){
             return new LoginCommand(server, client, rawMessage);
         }
-        if (rawMessage.startsWith(SEND_TO_ALL)){
-            //dopisać klasę komendy SEND
-            return null;
+        if (rawMessage.startsWith(SendToAllCommand.PREFIX_SEND_TO_ALL)){
+            return new SendToAllCommand(server, client, rawMessage);
         }
-        if(rawMessage.startsWith(SEND_DM)){
-            //dopisać klasę komendy SEND_MD
-            return null;
-        }
-        return null;
+        return new UnknownCommand(server, client);
     }
 }

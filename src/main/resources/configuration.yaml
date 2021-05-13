@@ -1,6 +1,7 @@
 port: 5555
 maxClients: 20
 users:
-  admin: admin
-  moderator: moderator
+  ewa: 1234
+  karol: abcd
+  adam: 5678
 channels: [random, general]
