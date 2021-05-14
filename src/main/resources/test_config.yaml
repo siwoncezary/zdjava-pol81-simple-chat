@@ -1,5 +1,0 @@
-games: [AAA, BBB, CCC]
-maxUsers: 101
-ipAddress: 100.100.100.100
-#Napisz klasę konfiguracyjną do tego pliku i napisz program, w którym po wczytaniu
-#pliku wyświetlone zostaną te parametry
